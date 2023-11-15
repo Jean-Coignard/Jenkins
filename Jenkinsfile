@@ -1,27 +1,16 @@
 pipeline {
   agent any
   stages {
-    stage('Test') {
+    stage('Depôt') {
       steps {
-        echo 'start test stage'
-        sleep 30
-        echo 'fin test stage'
+        sh 'git clone https://github.com/Jean-Coignard/Jenkins.git'
       }
     }
 
-    stage('Build') {
+    stage('Construction Image') {
       steps {
-        echo 'start build stage'
-        sleep 30
-        echo 'fin build stage'
-      }
-    }
-
-    stage('Deploy') {
-      steps {
-        echo 'start deploy stage'
-        sleep 30
-        echo 'fin delpoy stage'
+        sh '''cd C:\\Users\\jeanc\\Downloads
+docker build -t docker_tp:latest .'''
       }
     }
 
