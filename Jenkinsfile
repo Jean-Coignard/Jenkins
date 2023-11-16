@@ -8,7 +8,7 @@ pipeline {
             checkout([$class: 'GitSCM', branches: [[name: 'main']], userRemoteConfigs: [[url: 'https://github.com/Jean-Coignard/Jenkins.git']]])
           } catch (Exception e) {
             currentBuild.result = 'FAILURE'
-            error "Erreur lors du clonage du dépôt : ${e.getMessage()}"
+            error "Erreur lors du clonage du dÃ©pÃ´t : ${e.getMessage()}"
           }
         }
 
@@ -58,7 +58,7 @@ pipeline {
             def container = docker.image('docker-image-test').run("--name test_auto -p 8000:8080 -d")
           } catch (Exception e) {
             currentBuild.result = 'FAILURE'
-            error "Erreur lors du déploiement : ${e.getMessage()}"
+            error "Erreur lors du dÃ©ploiement : ${e.getMessage()}"
           }
         }
 
