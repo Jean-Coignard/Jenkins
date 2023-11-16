@@ -6,7 +6,7 @@ pipeline {
         script {
           try {
             dir('Jenkins') {
-              sh 'docker build -t docker-image:latest .'
+              sh 'docker build -t docker-image .'
             }
           } catch (Exception e) {
             currentBuild.result = 'FAILURE'
@@ -20,11 +20,11 @@ pipeline {
   }
   post {
     success {
-      emailext(subject: 'Build Jenkins réussi', body: 'Le build a réussi.', to: 'jeancoignard@gmail.com')
+      emailext(body: 'Le build a réussi.', subject: 'Succès du build', to: 'jeancoignard@gmail.com')
     }
 
     failure {
-      emailext(subject: 'Échec du Build Jenkins', body: 'Le Jenkins a échoué.', to: 'jeancoignard@gmail.com')
+      emailext(body: 'Le build a échoué.', subject: 'Échec du build', to: 'jeancoignard@gmail.com')
     }
 
   }
