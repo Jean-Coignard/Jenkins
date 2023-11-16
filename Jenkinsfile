@@ -8,7 +8,7 @@ pipeline {
             checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/Jean-Coignard/Jenkins.git']]])
           } catch (Exception e) {
             currentBuild.result = 'FAILURE'
-            error "Erreur lors du clonage du dépôt : ${e.getMessage()}"
+            error "Erreur lors du clonage du dÃ©pÃ´t : ${e.getMessage()}"
           }
         }
 
@@ -49,8 +49,8 @@ pipeline {
   post {
     success {
       script {
-        emailext body: 'Le build a réussi.',
-        subject: 'Succès du build',
+        emailext body: 'Le build a rÃ©ussi.',
+        subject: 'SuccÃ¨s du build',
         to: 'jeancoignard@gmail.com'
       }
 
@@ -58,8 +58,8 @@ pipeline {
 
     failure {
       script {
-        emailext body: 'Le build a échoué.',
-        subject: 'Échec du build',
+        emailext body: 'Le build a Ã©chouÃ©.',
+        subject: 'Ã‰chec du build',
         to: 'jeancoignard@gmail.com'
       }
 
