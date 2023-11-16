@@ -6,7 +6,7 @@ pipeline {
         script {
           try {
             dir('Jenkins') {
-              sh 'docker build -t docker-image .'
+              sh 'docker build -t docker-image:latest .'
             }
           } catch (Exception e) {
             currentBuild.result = 'FAILURE'
