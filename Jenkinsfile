@@ -7,5 +7,21 @@ pipeline {
       }
     }
 
+    stage('Construire') {
+      steps {
+        script {
+          try {
+            dir('Jenkins') {
+              sh 'docker build -t docker-image .'
+            }
+          } catch (Exception e) {
+            currentBuild.result = 'FAILURE'
+            error "Erreur lors de la construction : ${e.message}"
+          }
+        }
+
+      }
+    }
+
   }
 }
