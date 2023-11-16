@@ -5,10 +5,10 @@ pipeline {
       steps {
         script {
           try {
-            checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/Jean-Coignard/Jenkins.git']]])
+            checkout([$class: 'GitSCM', branches: [[name: 'main']], userRemoteConfigs: [[url: 'https://github.com/Jean-Coignard/Jenkins.git']]])
           } catch (Exception e) {
             currentBuild.result = 'FAILURE'
-            error "Erreur lors du clonage du dÃ©pÃ´t : ${e.getMessage()}"
+            error "Erreur lors du clonage du dépôt : ${e.getMessage()}"
           }
         }
 
@@ -45,24 +45,34 @@ pipeline {
       }
     }
 
+    stage('Deployer') {
+      when {
+        expression {
+          currentBuild.resultIsBetterOrEqualTo('SUCCESS')
+        }
+
+      }
+      steps {
+        script {
+          try {
+            def container = docker.image('docker-image-test').run("--name test_auto -p 8000:8080 -d")
+          } catch (Exception e) {
+            currentBuild.result = 'FAILURE'
+            error "Erreur lors du déploiement : ${e.getMessage()}"
+          }
+        }
+
+      }
+    }
+
   }
   post {
     success {
-      script {
-        emailext body: 'Le build a rÃ©ussi.',
-        subject: 'SuccÃ¨s du build',
-        to: 'jeancoignard@gmail.com'
-      }
-
+      emailext(body: 'Le build a réussi.', subject: 'Succès du build', to: 'jeancoignard@gmail.com')
     }
 
     failure {
-      script {
-        emailext body: 'Le build a Ã©chouÃ©.',
-        subject: 'Ã‰chec du build',
-        to: 'jeancoignard@gmail.com'
-      }
-
+      emailext(body: 'Le build a échoué.', subject: 'Échec du build', to: 'jeancoignard@gmail.com')
     }
 
   }
