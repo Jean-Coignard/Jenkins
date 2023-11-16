@@ -8,7 +8,7 @@ pipeline {
             checkout([$class: 'GitSCM', branches: [[name: 'main']], userRemoteConfigs: [[url: 'https://github.com/Jean-Coignard/Jenkins.git']]])
           } catch (Exception e) {
             currentBuild.result = 'FAILURE'
-            error "Erreur lors du clonage du dÃ©pÃ´t : ${e.getMessage()}"
+            error "Erreur lors du clonage du dépôt : ${e.getMessage()}"
           }
         }
 
@@ -58,8 +58,20 @@ pipeline {
             def container = docker.image('docker-image-test').run("--name test_auto -p 8000:8080 -d")
           } catch (Exception e) {
             currentBuild.result = 'FAILURE'
-            error "Erreur lors du dÃ©ploiement : ${e.getMessage()}"
+            error "Erreur lors du déploiement : ${e.getMessage()}"
           }
+        }
+
+      }
+    }
+
+    stage('Suppression Image') {
+      steps {
+        script {
+          sh 'docker ps -a'
+          sleep 90
+          sh 'docker rm --force test_auto'
+          sh 'docker ps -a'
         }
 
       }
