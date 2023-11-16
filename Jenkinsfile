@@ -67,12 +67,16 @@ pipeline {
 
   }
   post {
-    success {
-      emailext(body: 'Le build a réussi.', subject: 'Succès du build', to: 'jeancoignard@gmail.com')
-    }
+    always {
+      script {
+        discordSend(
+          description: "Le build a ${currentBuild.result}",
+          result: currentBuild.result,
+          title: env.JOB_NAME,
+          webhookURL: "https://discord.com/api/webhooks/1174694438770069535/ieyy0fS-HQdAteNizO5_Lz-PP0JB9FWqKfyN703oyrZLcZJpj6VRawcEWDEBQQk4HipD"
+        )
+      }
 
-    failure {
-      emailext(body: 'Le build a échoué.', subject: 'Échec du build', to: 'jeancoignard@gmail.com')
     }
 
   }
