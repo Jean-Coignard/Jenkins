@@ -20,11 +20,25 @@ pipeline {
         script {
           try {
             dir('Jenkins') {
-              sh 'docker build -t docker-image .'
+              sh 'docker build -t docker-image-test .'
             }
           } catch (Exception e) {
             currentBuild.result = 'FAILURE'
             error "Erreur lors de la construction : ${e.getMessage()}"
+          }
+        }
+
+      }
+    }
+
+    stage('Trivy') {
+      steps {
+        script {
+          try {
+            sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest image docker-image-test'
+          } catch (Exception e) {
+            currentBuild.result = 'FAILURE'
+            error "Erreur lors de l'analyse avec Trivy : ${e.getMessage()}"
           }
         }
 
