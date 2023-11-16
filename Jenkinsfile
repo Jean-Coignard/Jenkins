@@ -6,8 +6,7 @@ pipeline {
         script {
           try {
             dir('Jenkins') {
-              sh 'sudo systemctl start docker '
-              sh 'docker build -t docker-image .'
+              sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/workspace docker build -t docker-image .'
             }
           } catch (Exception e) {
             currentBuild.result = 'FAILURE'
