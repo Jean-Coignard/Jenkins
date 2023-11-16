@@ -6,8 +6,8 @@ pipeline {
         script {
           try {
             dir('Jenkins') {
-              sh 'docker build -t docker-image .'
               sh 'sudo systemctl start docker '
+              sh 'docker build -t docker-image .'
             }
           } catch (Exception e) {
             currentBuild.result = 'FAILURE'
