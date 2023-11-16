@@ -3,7 +3,15 @@ pipeline {
   stages {
     stage('Depot') {
       steps {
-        checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/Jean-Coignard/Jenkins.git']]])
+        script {
+          try {
+            checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/Jean-Coignard/Jenkins.git']]])
+          } catch (Exception e) {
+            currentBuild.result = 'FAILURE'
+            error "Erreur lors du clonage du dépôt : ${e.getMessage()}"
+          }
+        }
+
       }
     }
 
@@ -12,11 +20,11 @@ pipeline {
         script {
           try {
             dir('Jenkins') {
-              docker.build('docker-image-test')
+              sh 'docker build -t docker-image .'
             }
           } catch (Exception e) {
             currentBuild.result = 'FAILURE'
-            error "Erreur lors de la construction : ${e.message}"
+            error "Erreur lors de la construction : ${e.getMessage()}"
           }
         }
 
