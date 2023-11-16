@@ -18,4 +18,14 @@ pipeline {
     }
 
   }
+  post {
+    success {
+      emailext(subject: 'Build Jenkins réussi', body: 'Le build a réussi.', to: 'jeancoignard@gmail.com')
+    }
+
+    failure {
+      emailext(subject: 'Échec du Build Jenkins', body: 'Le Jenkins a échoué.', to: 'jeancoignard@gmail.com')
+    }
+
+  }
 }
