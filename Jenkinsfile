@@ -46,4 +46,24 @@ pipeline {
     }
 
   }
+  post {
+    success {
+      script {
+        emailext body: 'Le build a réussi.',
+        subject: 'Succès du build',
+        to: 'jeancoignard@gmail.com'
+      }
+
+    }
+
+    failure {
+      script {
+        emailext body: 'Le build a échoué.',
+        subject: 'Échec du build',
+        to: 'jeancoignard@gmail.com'
+      }
+
+    }
+
+  }
 }
