@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Depot') {
       steps {
-        checkout([$class: 'GitSCM', branches: [[name: 'main']], userRemoteConfigs: [[url: 'https://github.com/Jean-Coignard/Jenkins.git']]])
+        checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/Jean-Coignard/Jenkins.git']]])
       }
     }
 
@@ -12,7 +12,7 @@ pipeline {
         script {
           try {
             dir('Jenkins') {
-              sh 'docker build -t docker-image .'
+              docker.build('docker-image-test')
             }
           } catch (Exception e) {
             currentBuild.result = 'FAILURE'
